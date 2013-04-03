@@ -181,7 +181,7 @@ int nsod_network_sent_status_to_shell(NsodNetwork * network)
   int level_start=1;
 
   i=network->num_of_node-144;
-  level_start=1;
+  level_start=3;
 
 #ifdef _DEBUG
   i=0;

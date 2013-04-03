@@ -4,15 +4,17 @@ MPICC=mpicxx
 
 CFLAGS=-g 
 
-target=NsodNetwork NsodShell
+bin_dir=../bin
+
+target=$(bin_dir)/NsodNetwork $(bin_dir)/NsodShell
 
 all: $(target) 
 
-NsodShell : NsodShell.o NsodCommon.o cmd_flags.o NsodNode.o 
-	$(CC) $(CFLAGS) NsodShell.o NsodCommon.o cmd_flags.o NsodNode.o -o NsodShell -lm 
+$(bin_dir)/NsodShell : NsodShell.o NsodCommon.o cmd_flags.o NsodNode.o 
+	$(CC) $(CFLAGS) NsodShell.o NsodCommon.o cmd_flags.o NsodNode.o -o $(bin_dir)/NsodShell -lm 
 
-NsodNetwork: NsodCommon.o NsodNetwork.o cmd_flags.o NsodNode.o 
-	$(MPICC) $(CFLAGS) NsodCommon.o cmd_flags.o NsodNode.o NsodNetwork.o -o NsodNetwork -lm
+$(bin_dir)/NsodNetwork: NsodCommon.o NsodNetwork.o cmd_flags.o NsodNode.o 
+	$(MPICC) $(CFLAGS) NsodCommon.o cmd_flags.o NsodNode.o NsodNetwork.o -o $(bin_dir)/NsodNetwork -lm
 
 NsodShell.o: NsodShell.cpp  
 	$(CC) -c $(CFLAGS) NsodShell.cpp -o NsodShell.o 
