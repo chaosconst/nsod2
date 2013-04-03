@@ -2,7 +2,8 @@
 bin/
 bin-debug/
 bin-release/
-
+data/
+.o
 # Other files and folders
 .settings/
 
