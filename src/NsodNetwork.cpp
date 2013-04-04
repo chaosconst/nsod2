@@ -217,10 +217,22 @@ void say(NsodNetwork * network, string debug_info) {
   if (nsod_network_main_processor(network)) cout<<debug_info<<endl;
 }
 
-int nsod_network_init_nodes(NsodNetwork * network)
+void nsod_network_init_nodes(NsodNetwork * network)
 {
+  bool createModel = true;
+
+  char s[10];
+  sprintf(s,"%d",network->myid);
+  string filename = network->flags->model_file_prefix_ + s;
+
+  FILE *file=fopen(filename.c_str(),"rb");
+  if (file!=NULL) {
+    createModel = false;
+    fclose(file);
+  }
+
   // if no model file spesified, create a new model
-  if (network->flags->model_file_prefix_.empty()) {
+  if (createModel) {
 
     say(network,string("No Specific Model File, We are going to build a new model.\n"));
 
@@ -372,7 +384,7 @@ int nsod_network_init_nodes(NsodNetwork * network)
     fread(&network->iterations,sizeof(int),1,file);
     fread(&network->network_level,sizeof(int),1,file);
     int network_level = network -> network_level;
-    
+
     //allocate
     network->model_cluster_num_width = (int*) malloc(sizeof(int)*network_level) ;
     network->model_cluster_num_height = (int*) malloc(sizeof(int)*network_level) ;
@@ -446,7 +458,7 @@ int nsod_network_init_nodes(NsodNetwork * network)
 
                 int * connected_node_pos_tmp = (int*)malloc(sizeof(int)*connect_dimension);
                 double * connection_strengh = (double*)malloc(sizeof(double)*connect_dimension);
-    
+
                 fread(connected_node_pos_tmp,connect_dimension*sizeof(int),1,file); 
                 fread(connection_strengh,connect_dimension*sizeof(double),1,file); 
 
@@ -481,7 +493,6 @@ int nsod_network_init_nodes(NsodNetwork * network)
     fclose(file);
 
   }
-  return 0;
 }
 
 int nsod_network_sync_nodes_activity(NsodNetwork * network)
@@ -585,6 +596,7 @@ int nsod_network_main(NsodNetwork * network)
     nsod_network_save_connection(network);
 
   }
+  return 0;
 }
 
 int main(int argc, char *argv[])
