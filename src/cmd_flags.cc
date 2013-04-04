@@ -25,7 +25,7 @@ CmdLineFlags::CmdLineFlags() {
   input_sample_domain_size_ = 1;
   model_size_ = "4x4,4x4,2x2";
   sample_size_ = "8x8,10x10,8x8";
-  model_file_prefix_ = "";
+  model_file_prefix_ = "data/con/autosave/con.";
   input_file = "";
   total_iterations_ = 1000000000;
 	input_width = "32,4,4,2";

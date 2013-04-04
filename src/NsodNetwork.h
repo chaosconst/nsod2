@@ -45,7 +45,7 @@ typedef struct
 /* methods of NsodNetwork */
 	NsodNetwork * 		nsod_network_new();
 	bool 			nsod_network_main_processor(NsodNetwork * network);
-	int 			nsod_network_init_nodes(NsodNetwork * network);
+	void 			nsod_network_init_nodes(NsodNetwork * network);
 	int 			nsod_network_get_inputs(NsodNetwork * network);
 	int 			nsod_network_sent_status_to_shell(NsodNetwork * network);
 	int 			nsod_network_main(NsodNetwork * network);

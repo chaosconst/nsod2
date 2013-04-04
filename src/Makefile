@@ -2,7 +2,7 @@ CC=g++
 
 MPICC=mpicxx
 
-CFLAGS=-g 
+CFLAGS=-g -O2 
 
 bin_dir=../bin
 

@@ -268,6 +268,7 @@ int nsod_shell_fill_image(NsodShell * shell, int node_id, double fire, double * 
   for (int con_idx=0;con_idx<node->connect_dimension;con_idx++) {
     nsod_shell_fill_image(shell, node->connect[con_idx], fire * node->strengh[con_idx], image);
   }
+  return 0;
 }
 
 int main(int argc, char *argv[])
