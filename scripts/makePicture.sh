@@ -3,6 +3,7 @@ base=$(dirname $0)/../
 bin=$base/bin/
 src=$base/src/
 data=$base/data/
+html=$base/html/
 
 autosave_dir=$data/con/autosave/
 
@@ -17,7 +18,24 @@ $bin/NsodShell --model_file_prefix $autosave_dir/con. --model_file_num $filenum 
 echo "start txt -> png convert"
 filenum=$(ls $autosave_dir/txt/s_*| wc -l)
 for ((i=0;i<$filenum;i++)) {
-  convert $autosave_dir/txt/s_$i.txt $autosave_dir/img/s_$i.png
+  convert $autosave_dir/txt/s_$i.txt $autosave_dir/img/s_$i.png  
 }
 
-cp -r $autosave_dir/img /Applications/MAMP/htdocs/nsod_shell/ 
+html_root=/Applications/MAMP/htdocs/nsod_shell/
+html_url_pre="http://127.0.0.1/nsod_shell/img/s_"
+
+cp -r $autosave_dir/img $html_root/
+
+rm $html/body
+for ((i=0;i<$filenum;i++)) {
+  echo "            <a href=\"$html_url_pre$i.png\">" >> $html/body
+  echo "                <img data-title=\"S$i\" >" >> $html/body
+  echo "                     src=\"$html_url_pre$i.png\">" >> $html/body
+  echo "            </a>" >> $html/body
+}
+
+cat $html/index_head > $html/index.html
+cat $html/body >> $html/index.html
+cat $html/index_foot >> $html/index.html
+
+cp -r $html/index.html $html_root/
