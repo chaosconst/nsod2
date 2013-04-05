@@ -127,6 +127,17 @@ double getDistance(double * weight, double * input_vector, int dimension)
   return sum;
 }
 
+double getProduct(double * weight, double * input_vector, int dimension)
+{
+  double sum=0;
+  for (int i=0;i<dimension;i++)
+  {
+//    sum+=(weight[i]-input_vector[i])*(weight[i]-input_vector[i]);
+    sum+=(weight[i]-0.5)*(input_vector[i]-0.5)*4;
+  }
+  return sum/dimension;
+}
+
 double theta(double distance)
 {
   if (distance<0.0000001) return 2;
@@ -135,9 +146,6 @@ double theta(double distance)
 
 int nsod_network_compute_cluster_activity_change(NsodNetwork * network, NsodNodeCluster * cluster)
 {
-  //==============================================
-  //version1: engrSom
-  //==============================================
   int input_dimension = cluster->node[0]->connect_dimension;
   double input_vector[input_dimension];
   int sample_dimension = cluster->sample_dimension_width * cluster->sample_dimension_height;
@@ -146,6 +154,38 @@ int nsod_network_compute_cluster_activity_change(NsodNetwork * network, NsodNode
   for (int i=0;i<input_dimension;i++) {
     input_vector[i] = network->activity_all_node[cluster->node[0]->connect[i]];
   }
+//
+//  //==============================================
+//  //version2: Hebian Som
+//  //==============================================
+//  /*step1 find the BFU(Best Fired Unit)*/
+//  int BFU=0;
+//  double max_product=-1;
+//  for (int i=0;i<sample_dimension;i++)	
+//  {
+//    double product = getProduct(cluster->node[i]->strengh,input_vector,input_dimension);
+//    network->activity_all_node_change[cluster->node[i]->absolute_position]=product;
+//    if (max_product<product)
+//    {
+//      max_product = product;
+//      BFU=i;
+//    }
+//  }
+//
+//  /*step2 change weight*/
+//  for (int i=0;i<sample_dimension;i++)	
+//  {
+//    double distances=theta(pow(cluster->node[i]->x-cluster->node[BFU]->x,2)+pow(cluster->node[i]->y-cluster->node[BFU]->y,2));
+//
+//    for (int j=0;j<input_dimension;j++)
+//    {
+//      cluster->node[i]->strengh[j]=cluster->node[i]->strengh[j]+distances*network->flags->study_speed*(input_vector[j]-cluster->node[i]->strengh[j]);
+//    }
+//  }
+  
+  //==============================================
+  //version1: engrSom
+  //==============================================
 
   /*step1 find the BFU(Best Fired Unit)*/
   int BFU=0;
@@ -180,8 +220,8 @@ int nsod_network_sent_status_to_shell(NsodNetwork * network)
   int i=network->num_of_basic_inputs;
   int level_start=1;
 
-  i=network->num_of_node-144;
-  level_start=3;
+  level_start=network->network_level-1;
+  i=network->num_of_node-network->model_cluster_sample_num_height[level_start]*network->model_cluster_sample_num_width[level_start];
 
 #ifdef _DEBUG
   i=0;
@@ -428,7 +468,6 @@ void nsod_network_init_nodes(NsodNetwork * network)
 
     //read connection
     int i=network->num_of_basic_inputs;
-    int absolute_postion_level=i;
     for (int level=1;level<network_level;level++) {
 
       for (int y=0;y<network->model_cluster_num_height[level];y++) {
@@ -462,7 +501,6 @@ void nsod_network_init_nodes(NsodNetwork * network)
                 fread(connected_node_pos_tmp,connect_dimension*sizeof(int),1,file); 
                 fread(connection_strengh,connect_dimension*sizeof(double),1,file); 
 
-
                 cluster_iter->node[position_cluster]=nsod_node_new(sx,sy,
                     network->model_cluster_input_num_width[level],
                     network->model_cluster_input_num_height[level],
@@ -485,8 +523,6 @@ void nsod_network_init_nodes(NsodNetwork * network)
           i++;
         }
       }
-      absolute_postion_level += network->model_cluster_num_width[level] * network->model_cluster_num_height[level] 
-        * network->model_cluster_sample_num_width[level] * network->model_cluster_sample_num_height[level];
 
     }
 
@@ -553,7 +589,6 @@ void nsod_network_save_connection(NsodNetwork * network) {
 
   for (int i=0;i<network->num_of_my_cluster;i++) {
     for (int j=0;j<network->clusters[i]->sample_dimension_width*network->clusters[i]->sample_dimension_height;j++) {
-      nsod_cluster_con2txt(network->clusters[i], network);
       fwrite(&network->clusters[i]->node[j]->absolute_position,sizeof(int),1,file);
       fwrite(&network->clusters[i]->node[j]->connect_dimension,sizeof(int),1,file);
       fwrite(network->clusters[i]->node[j]->connect,network->clusters[i]->node[j]->connect_dimension*sizeof(int),1,file);

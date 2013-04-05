@@ -28,6 +28,5 @@ typedef struct CNsodNodeCluster
 	NsodNode**		node; 
 } NsodNodeCluster;
 	NsodNodeCluster * 	nsod_node_cluster_new(int width, int height);
-  void nsod_cluster_con2txt(NsodNodeCluster * node, NsodNetwork * network); 
 
 #endif

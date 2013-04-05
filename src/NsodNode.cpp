@@ -39,7 +39,3 @@ void nsod_node_print_self_info(NsodNode * node) {
 	}
 	printf("\n");
 }	
-
-void nsod_cluster_con2txt(NsodNodeCluster * cluster, NsodNetwork * network) {
-}	
-
