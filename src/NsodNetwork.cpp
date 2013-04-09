@@ -154,47 +154,20 @@ int nsod_network_compute_cluster_activity_change(NsodNetwork * network, NsodNode
   for (int i=0;i<input_dimension;i++) {
     input_vector[i] = network->activity_all_node[cluster->node[0]->connect[i]];
   }
-//
-//  //==============================================
-//  //version2: Hebian Som
-//  //==============================================
-//  /*step1 find the BFU(Best Fired Unit)*/
-//  int BFU=0;
-//  double max_product=-1;
-//  for (int i=0;i<sample_dimension;i++)	
-//  {
-//    double product = getProduct(cluster->node[i]->strengh,input_vector,input_dimension);
-//    network->activity_all_node_change[cluster->node[i]->absolute_position]=product;
-//    if (max_product<product)
-//    {
-//      max_product = product;
-//      BFU=i;
-//    }
-//  }
-//
-//  /*step2 change weight*/
-//  for (int i=0;i<sample_dimension;i++)	
-//  {
-//    double distances=theta(pow(cluster->node[i]->x-cluster->node[BFU]->x,2)+pow(cluster->node[i]->y-cluster->node[BFU]->y,2));
-//
-//    for (int j=0;j<input_dimension;j++)
-//    {
-//      cluster->node[i]->strengh[j]=cluster->node[i]->strengh[j]+distances*network->flags->study_speed*(input_vector[j]-cluster->node[i]->strengh[j]);
-//    }
-//  }
-  
-  //==============================================
-  //version1: engrSom
-  //==============================================
 
+  //==============================================
+  //version2: Hebian Som
+  //==============================================
   /*step1 find the BFU(Best Fired Unit)*/
   int BFU=0;
-  double min_distance=10000;
+  double max_product=-1;
   for (int i=0;i<sample_dimension;i++)	
   {
-    if (min_distance>getDistance(cluster->node[i]->strengh,input_vector,input_dimension))
+    double product = getProduct(cluster->node[i]->strengh,input_vector,input_dimension);
+//    network->activity_all_node_change[cluster->node[i]->absolute_position]=product;
+    if (max_product<product)
     {
-      min_distance=getDistance(cluster->node[i]->strengh,input_vector,input_dimension);
+      max_product = product;
       BFU=i;
     }
   }
@@ -203,13 +176,45 @@ int nsod_network_compute_cluster_activity_change(NsodNetwork * network, NsodNode
   for (int i=0;i<sample_dimension;i++)	
   {
     double distances=theta(pow(cluster->node[i]->x-cluster->node[BFU]->x,2)+pow(cluster->node[i]->y-cluster->node[BFU]->y,2));
+    if (distances<0.1) distances = 0;
+
     network->activity_all_node_change[cluster->node[i]->absolute_position]=distances/2;
+
+    if ((cluster->node[0]->absolute_position) < (1024+6400)) continue;
 
     for (int j=0;j<input_dimension;j++)
     {
       cluster->node[i]->strengh[j]=cluster->node[i]->strengh[j]+distances*network->flags->study_speed*(input_vector[j]-cluster->node[i]->strengh[j]);
     }
   }
+  
+//  //==============================================
+//  //version1: engrSom
+//  //==============================================
+//
+//  /*step1 find the BFU(Best Fired Unit)*/
+//  int BFU=0;
+//  double min_distance=10000;
+//  for (int i=0;i<sample_dimension;i++)	
+//  {
+//    if (min_distance>getDistance(cluster->node[i]->strengh,input_vector,input_dimension))
+//    {
+//      min_distance=getDistance(cluster->node[i]->strengh,input_vector,input_dimension);
+//      BFU=i;
+//    }
+//  }
+//
+//  /*step2 change weight*/
+//  for (int i=0;i<sample_dimension;i++)	
+//  {
+//    double distances=theta(pow(cluster->node[i]->x-cluster->node[BFU]->x,2)+pow(cluster->node[i]->y-cluster->node[BFU]->y,2));
+//    network->activity_all_node_change[cluster->node[i]->absolute_position]=distances/2;
+//
+//    for (int j=0;j<input_dimension;j++)
+//    {
+//      cluster->node[i]->strengh[j]=cluster->node[i]->strengh[j]+distances*network->flags->study_speed*(input_vector[j]-cluster->node[i]->strengh[j]);
+//    }
+//  }
 
   return 0; 
 }

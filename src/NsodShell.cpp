@@ -245,7 +245,6 @@ int nsod_shell_print_clusters(NsodShell * shell) {
           fprintf(file,"%d,%d: (255,%d,%d)\n",i+node->x*shell->model_cluster_num_width[0],j+node->y*shell->model_cluster_num_height[0],color,color);
         }
       }
-      fprintf(file,"\n");
 
     }
     fclose(file);

@@ -7,5 +7,5 @@ scripts=$base/scripts/
 
 while TRUE; do 
   $scripts/makePicture.sh
-  sleep 120;
+  sleep 10;
 done;

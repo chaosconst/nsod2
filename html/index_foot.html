@@ -1,0 +1,27 @@
+        </div>
+
+        <p class="cred">Powered by <a href="http://swarma.org/wiki/">chaosconst</a>.</p>
+    </div>
+
+    <script>
+
+    // Load the classic theme
+    Galleria.loadTheme('galleria.classic.min.js');
+
+    // Initialize Galleria
+    Galleria.run('#galleria');
+
+    function refresh() {
+      rand_num = Math.floor(Math.random()*100);
+
+      img_src_raw = $('.active img').attr('src');
+      img_src = img_src_raw.split('#')[0];
+      $("img[src='"+img_src+"']").attr('src',img_src+"#"+rand_num);
+      $("img[src='"+img_src_raw+"']").attr('src',img_src+"#"+rand_num);
+
+    }
+    setInterval(function(){refresh()},1000);
+
+    </script>
+    </body>
+</html>

@@ -1,39 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Nsod Node Cluster Monitor</title>
-        <style>
-
-            /* Demo styles */
-            html,body{background:#222;margin:0;}
-            body{border-top:4px solid #000;}
-            .content{color:#777;font:12px/1.4 "helvetica neue",arial,sans-serif;width:620px;margin:20px auto;}
-            h1{font-size:12px;font-weight:normal;color:#ddd;margin:0;}
-            p{margin:0 0 20px}
-            a {color:#22BCB9;text-decoration:none;}
-            .cred{margin-top:20px;font-size:11px;}
-
-            /* This rule is read by Galleria to define the gallery height: */
-            #galleria{height:640px}
-
-        </style>
-
-        <!-- load jQuery -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-
-        <!-- load Galleria -->
-        <script src="galleria-1.2.7.min.js"></script>
-
-    </head>
-<body>
-    <div class="content">
-        <h1>Nsod Node Cluster Monitor</h1>
-        <p>show the weight of nodes.</p>
-
-        <!-- Adding gallery images. We use resized thumbnails here for better performance, but it’s not necessary -->
-
-        <div id="galleria">
             <a href="http://127.0.0.1/nsod_shell/img/s_0.png">
                 <img data-title="S0" 
                      src="http://127.0.0.1/nsod_shell/img/s_0.png">
@@ -102,30 +66,3 @@
                 <img data-title="S16" 
                      src="http://127.0.0.1/nsod_shell/img/s_16.png">
             </a>
-        </div>
-
-        <p class="cred">Powered by <a href="http://swarma.org/wiki/">chaosconst</a>.</p>
-    </div>
-
-    <script>
-
-    // Load the classic theme
-    Galleria.loadTheme('galleria.classic.min.js');
-
-    // Initialize Galleria
-    Galleria.run('#galleria');
-
-    function refresh() {
-      rand_num = Math.floor(Math.random()*100);
-
-      img_src_raw = $('.active img').attr('src');
-      img_src = img_src_raw.split('#')[0];
-      $("img[src='"+img_src+"']").attr('src',img_src+"#"+rand_num);
-      $("img[src='"+img_src_raw+"']").attr('src',img_src+"#"+rand_num);
-
-    }
-    setInterval(function(){refresh()},1000);
-
-    </script>
-    </body>
-</html>

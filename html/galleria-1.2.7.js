@@ -2240,7 +2240,7 @@ Galleria.prototype = {
 
         // apply options
         this._options = {
-            autoplay: false,
+            autoplay: true,
             carousel: true,
             carouselFollow: true,
             carouselSpeed: 400,
